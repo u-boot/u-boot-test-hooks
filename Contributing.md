@@ -1,16 +1,14 @@
-To add patches to this repo, please either:
+To add patches to this repo, please send the patch via email, at least:
 
-a) Submit a github pull request.
-
-b) Send the patch via email, at least:
-
-To: swarren@nvidia.com
+To: "Tom Rini <trini@konsulko.com>"
 
 Cc: u-boot@lists.denx.de
 
-With a subject prefix of "[PATCH test hooks]", i.e.:
+With a subject prefix of "[u-boot-test-hooks PATCH]", i.e.:
 
-    git format-patch --subject-prefix='PATCH test hooks' ...
+    git format-patch --subject-prefix='u-boot-test-hooks PATCH' ...
+
+or using patman with "Series-prefix: u-boot-test-hooks" to generate the patch.
 
 You will need to include a signed-off-by line in your patch. See
 https://developercertificate.org/ for the meaning of this.
