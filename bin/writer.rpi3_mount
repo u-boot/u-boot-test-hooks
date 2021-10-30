@@ -41,7 +41,7 @@ fi
 
 # Enable the UART and fix the GPU frequency so it works correctly
 sed -i '/enable_uart/c\enable_uart = 1' /media/rpi3_b_boot/config.txt
-if ! grep -q gpu_freq=250 /media/rpi3_b_boot/config.txt; then
+if ! grep -q "^gpu_freq=250" /media/rpi3_b_boot/config.txt; then
     echo 'gpu_freq=250' >>/media/rpi3_b_boot/config.txt
 fi
 
