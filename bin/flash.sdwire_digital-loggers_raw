@@ -33,20 +33,7 @@ curl --data ${power_port}=OFF -o /dev/null --silent \
 # Switch over to get USB card access
 sd-mux-ctrl --device-serial ${sdwire_serial} --ts
 
-# Wait for the device to become available
-done=false
-for i in {0..9}; do
-    if dd if=${raw_device} of=/dev/null count=1 >/dev/null 2>&1; then
-        done=true
-        break
-    fi
-
-    sleep 1
-done
-if [[ $done = false ]]; then
-    echo "Failed to access ${raw_device} after 10 tries"
-    exit 1
-fi
+. wait_raw_device
 
 writer.${flash_writer} ${raw_device} ${U_BOOT_BUILD_DIR}
 

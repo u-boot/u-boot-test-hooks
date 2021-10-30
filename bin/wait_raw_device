@@ -1,4 +1,4 @@
-# Copyright 2019 Google LLC. All rights reserved.
+# Copyright 2021 Google LLC
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -18,25 +18,17 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-# Designed for using SDwire uSD mux and ykush USB power control:
-# https://wiki.tizen.org/SDWire
-# https://www.yepkit.com/products/ykush
+# Wait for the device ${raw_device} to become available
+complete=false
+for i in {0..9}; do
+    if dd if=${raw_device} of=/dev/null count=1 >/dev/null 2>&1; then
+        complete=true
+        break
+    fi
 
-# It requires these tools:
-# sd-mux-ctrl at https://git.tizen.org/cgit/tools/testlab/sd-mux/
-# ykushcmd at https://github.com/Yepkit/ykush
-
-mount_dir=/media/${mount_point}
-
-# Power off
-. poweroff.${power_impl}
-
-# Switch over to get USB card access
-sd-mux-ctrl --device-serial ${sdwire_serial} --ts
-
-. wait_raw_device
-
-writer.${flash_writer} ${raw_device} ${U_BOOT_BUILD_DIR}
-
-# Back to card access for the DUT
-sd-mux-ctrl --device-serial ${sdwire_serial} --dut
+    sleep 1
+done
+if [[ $complete = false ]]; then
+    echo "Failed to access ${raw_device} after 10 tries"
+    exit 1
+fi
