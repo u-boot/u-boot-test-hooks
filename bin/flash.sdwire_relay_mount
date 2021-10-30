@@ -21,12 +21,14 @@
 # Designed for using SDwire uSD mux and selected power control:
 # https://wiki.tizen.org/SDWire
 
+# It requires these tools:
+# sd-mux-ctrl at https://git.tizen.org/cgit/tools/testlab/sd-mux/
+# usbrelay
+
 . poweroff.${power_impl}
 
 sleep 0.1
-echo common
 
 . flash.sdwire_common_mount
 
 . poweron.${power_impl}
-echo flash done
