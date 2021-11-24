@@ -1,0 +1,23 @@
+#!/bin/sh
+# SPDX-License-Identifier: BSD-2
+#
+# This script launches swtpm to emulate a TPMv2.
+#
+# The parameter -t makes it unload when the connection to QEMU is
+# terminated.
+#
+# To make use of it add
+#
+#     qemu_helper_script="swtpm"
+#
+# to the board script and the following arguments to qemu_extra_args
+#
+#     -chardev socket,id=chrtpm,path=/tmp/tpm/swtpm-sock \
+#     -tpmdev emulator,id=tpm0,chardev=chrtpm \
+#     -device tpm-tis-device,tpmdev=tpm0
+#
+# U-Boot must be built with CONFIG_TPM2_MMIO=y.
+
+mkdir -p /tmp/tpm
+swtpm socket -d -t --tpmstate dir=/tmp/tpm --tpm2 \
+--ctrl type=unixio,path=/tmp/tpm/swtpm-sock
