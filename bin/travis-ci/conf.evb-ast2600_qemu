@@ -1,0 +1,13 @@
+# Copyright 2022 IBM Corp.
+# Joel Stanley <joel@jms.id.au>
+# SPDX-License-Identifier: GPL-2.0+
+
+console_impl=qemu
+qemu_machine="ast2600-evb"
+qemu_binary="qemu-system-arm"
+qemu_extra_args="-nographic -nic user,tftp=${UBOOT_TRAVIS_BUILD_DIR}"
+qemu_kernel_args="-drive file=${U_BOOT_BUILD_DIR}/flash.img,format=raw,if=mtd"
+flash_u_boot_bin="u-boot-with-spl.bin"
+reset_impl=none
+flash_impl=qemu_gen_padded_image
+flash_size=64
