@@ -5,7 +5,7 @@
 console_impl=qemu
 qemu_machine="ast2500-evb"
 qemu_binary="qemu-system-arm"
-qemu_extra_args="-nographic -m 512M -serial mon:stdio -net nic,model=ftgmac100 -net user,id=net0,tftp=${UBOOT_TRAVIS_BUILD_DIR}"
+qemu_extra_args="-nographic -nic user,tftp=${UBOOT_TRAVIS_BUILD_DIR}"
 qemu_kernel_args="-drive file=${U_BOOT_BUILD_DIR}/flash.img,format=raw,if=mtd"
 reset_impl=none
 flash_impl=qemu_gen_padded_image
