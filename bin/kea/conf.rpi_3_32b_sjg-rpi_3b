@@ -23,7 +23,7 @@ reset_impl=ykush
 flash_impl=sdwire_poweroff_mount
 power_impl=ykush
 
-flash_writer=rpi3_mount
+flash_writer=rpi_mount
 
 ykush_serial=YK17698
 ykush_port=1

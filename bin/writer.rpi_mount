@@ -1,4 +1,5 @@
 # Copyright 2019 Google LLC. All rights reserved.
+# Copyright 2024 Konsulko Group. All rights reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -18,27 +19,38 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-# Writes rpi3_b to the board
-
-set -ex
+set -e
 
 build=${U_BOOT_BUILD_DIR}
 
 echo "Writing to ${mount_dir} from build at ${build}"
 
-# First make a copy of the original files if we haven't already
-if [[ ! -e ${mount_dir}/config.orig ]]; then
-    cp ${mount_dir}/config.txt ${mount_dir}/config.orig
-fi
-if [[ ! -e ${mount_dir}/rpi3-u-boot.bin.orig ]]; then
-    cp ${mount_dir}/rpi3-u-boot.bin ${mount_dir}/rpi3-u-boot.bin.orig
-fi
+case "${board_type}" in
+rpi)
+    kernel_dst=kernel.img
+    ;;
+rpi_2)
+    kernel_dst=kernel7.img
+    ;;
+rpi_3|rpi_3b|rpi_3_b_plus|rpi_4|rpi_arm64)
+    kernel_dst=kernel8.img
+    ;;
+rpi_3_32b|rpi_4_32b)
+    kernel_dst=kernel8-32.img
+    ;;
+*)
+    echo Unknown Pi \""${board_type}"\"
+    exit 1
+    ;;
+esac
 
-# Enable the UART and fix the GPU frequency so it works correctly
-sed -i '/enable_uart/c\enable_uart = 1' /media/rpi3_b_boot/config.txt
-if ! grep -q "^gpu_freq=250" /media/rpi3_b_boot/config.txt; then
-    echo 'gpu_freq=250' >>/media/rpi3_b_boot/config.txt
-fi
+sudo rm -f ${mount_dir}/kernel*img
+sudo cp -v ${build}/u-boot.bin ${mount_dir}/${kernel_dst}
 
-# Copy U-Boot over from the build directory
-cp ${build}/u-boot.bin ${mount_dir}/rpi3-u-boot.bin
+echo "enable_uart=1" | sudo tee ${mount_dir}/config.txt
+
+case "${board_ident}" in
+3-32-pl011)
+    echo "dtoverlay=pi3-miniuart-bt" | sudo tee -a ${mount_dir}/config.txt
+    ;;
+esac
