@@ -1,0 +1,36 @@
+# Copyright 2022 Konsulko Group. All rights reserved.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+# DEALINGS IN THE SOFTWARE.
+
+# Copies MLO to the filesystem
+
+set -e
+
+build=${U_BOOT_BUILD_DIR}
+
+if [ -z "${tispl}" -o -z "${uboot}" -o -z "${tiboot3}" ]; then
+    echo "Must configure tispl, uboot, tiboot3 and optionally sysfw"
+    echo "per the board documentation."
+    exit 1
+fi
+echo "Writing to ${mount_dir} from build at ${build}"
+sudo cp -v ${build}/${tispl} ${mount_dir}/tispl.bin
+sudo cp -v ${build}/${uboot} ${mount_dir}/u-boot.img.bin
+sudo cp -v ${build/_a??/_r5}/${tiboot3} ${mount_dir}/tiboot3.bin
+[ ! -z "${sysfw}" ] && sudo cp -v ${build/_a??/_r5}/${sysfw} ${mount_dir}/sysfw.itb
