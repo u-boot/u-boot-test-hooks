@@ -20,23 +20,18 @@
 
 # Writes rpi3_b to the board
 
-# Args:
-#  $1: Mount point of the sdcard when board is off
-#  $2: U-Boot build directory
-
 set -ex
 
-mount=$1
-build=$2
+build=${U_BOOT_BUILD_DIR}
 
-echo "Writing to ${mount} from build at ${build}"
+echo "Writing to ${mount_dir} from build at ${build}"
 
 # First make a copy of the original files if we haven't already
-if [[ ! -e ${mount}/config.orig ]]; then
-    cp ${mount}/config.txt ${mount}/config.orig
+if [[ ! -e ${mount_dir}/config.orig ]]; then
+    cp ${mount_dir}/config.txt ${mount_dir}/config.orig
 fi
-if [[ ! -e ${mount}/rpi3-u-boot.bin.orig ]]; then
-    cp ${mount}/rpi3-u-boot.bin ${mount}/rpi3-u-boot.bin.orig
+if [[ ! -e ${mount_dir}/rpi3-u-boot.bin.orig ]]; then
+    cp ${mount_dir}/rpi3-u-boot.bin ${mount_dir}/rpi3-u-boot.bin.orig
 fi
 
 # Enable the UART and fix the GPU frequency so it works correctly
@@ -46,4 +41,4 @@ if ! grep -q "^gpu_freq=250" /media/rpi3_b_boot/config.txt; then
 fi
 
 # Copy U-Boot over from the build directory
-cp ${build}/u-boot.bin ${mount}/rpi3-u-boot.bin
+cp ${build}/u-boot.bin ${mount_dir}/rpi3-u-boot.bin

@@ -52,7 +52,8 @@ if ! mountpoint -q ${mount_dir}; then
     exit 1
 fi
 
-writer.${flash_writer} ${mount_dir} ${U_BOOT_BUILD_DIR}
+# Perform the write, pass along as much environment as possible
+. writer.${flash_writer}
 
 complete=false
 for i in {0..9}; do

@@ -20,22 +20,17 @@
 
 # Writes zynq images to the board
 
-# Args:
-#  $1: Mount point of the sdcard when board is off
-#  $2: U-Boot build directory
-
 set -ex
 
 tmp=$(mktemp -d)
 
-mount=$1
-build=$2
+build=${U_BOOT_BUILD_DIR}
 
-echo "Writing to ${mount} from build at ${build}"
+echo "Writing to ${mount_dir} from build at ${build}"
 
 # Copy U-Boot over from the build directory
-cp ${build}/u-boot.bin ${mount}/rpi3-u-boot.bin
+cp ${build}/u-boot.bin ${mount_dir}/rpi3-u-boot.bin
 zynq-boot-bin.py -o ${tmp}/boot.bin -u ${build}/spl/u-boot-spl-dtb.bin
-cp ${tmp}/boot.bin ${mount}/BOOT.bin
-cp ${build}/u-boot.img ${mount}/.
+cp ${tmp}/boot.bin ${mount_dir}/BOOT.bin
+cp ${build}/u-boot.img ${mount_dir}/.
 rm -rf ${tmp}
