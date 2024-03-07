@@ -31,6 +31,6 @@ if [ -z "${tispl}" -o -z "${uboot}" -o -z "${tiboot3}" ]; then
 fi
 echo "Writing to ${mount_dir} from build at ${build}"
 sudo cp -v ${build}/${tispl} ${mount_dir}/tispl.bin
-sudo cp -v ${build}/${uboot} ${mount_dir}/u-boot.img.bin
+sudo cp -v ${build}/${uboot} ${mount_dir}/u-boot.img
 sudo cp -v ${build/_a??/_r5}/${tiboot3} ${mount_dir}/tiboot3.bin
 [ ! -z "${sysfw}" ] && sudo cp -v ${build/_a??/_r5}/${sysfw} ${mount_dir}/sysfw.itb
