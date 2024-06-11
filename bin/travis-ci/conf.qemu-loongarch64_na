@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: MIT
+#
+# Copyright (c) 2024 Jiaxun Yang
+#
+
+console_impl=qemu
+qemu_machine="virt"
+qemu_binary="qemu-system-loongarch64"
+qemu_extra_args="-m 1G -nographic -netdev user,id=net0,tftp=${UBOOT_TRAVIS_BUILD_DIR} -device virtio-net-pci,netdev=net0 -device virtio-rng-pci"
+qemu_kernel_args="-bios ${U_BOOT_BUILD_DIR}/u-boot.bin"
+reset_impl=none
+flash_impl=none
