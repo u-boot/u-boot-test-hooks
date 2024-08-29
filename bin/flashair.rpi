@@ -27,34 +27,18 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-flashair_rmlist=`mktemp`
-
-case "${board_type}" in
-rpi)
-    kernel_dst=kernel.img
-    ;;
-rpi_2)
-    kernel_dst=kernel7.img
-    ;;
-rpi_3)
-    kernel_dst=kernel8.img
-    ;;
-rpi_3_32b)
-    kernel_dst=kernel8-32.img
-    ;;
-*)
-    echo Unknown Pi \""${board_type}"\"
-    exit 1
-    ;;
-esac
-
-echo 'kern*.img' > "${flashair_rmlist}"
-
-cp "${U_BOOT_BUILD_DIR}"/u-boot.bin "${UL_DIR}"/"${kernel_dst}"
+cp "${U_BOOT_BUILD_DIR}"/u-boot.bin "${UL_DIR}"/u-boot.bin
 
 touch "${UL_DIR}/config.txt"
 
 echo "enable_uart=1" >> "${UL_DIR}/config.txt"
+echo "kernel=u-boot.bin" >> "${UL_DIR}/config.txt"
+
+case "${board_type}" in
+rpi_3|rpi_3b|rpi_3_b_plus|rpi_4|rpi_arm64)
+    echo "arm_64bit=1" >> "${UL_DIR}/config.txt"
+    ;;
+esac
 
 case "${board_ident}" in
 3-32-pl011)
