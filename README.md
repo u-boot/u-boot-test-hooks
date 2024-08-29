@@ -206,7 +206,7 @@ program which is used to integrate with the U-Boot pytests.
 
 Since Labgrid has all the information necessary to build and boot on a lab,
 there is no per-board configuration required. The various flash.xxx and
-recovery.xxx scripts are not used. To set it up:
+recovery.xxx scripts are not used. To set it up, one implementation is:
 
 - In your bin/$hostname directory, create an executable file
   `common-labgrid-sjg` and set your crossbar and environment information, for
@@ -249,6 +249,17 @@ containing::
     . "${bin_dir}/${hostname}/common-labgrid-sjg"
 
 That should be all that is needed.
+
+An alternate implementation requires setting the following environment
+variables must be set as per your lab:
+
+- `LG_CROSSBAR` must point at the crossbar service.
+- `LG_PLACE` must point at the device under test.
+- `LG_ENV` must point at the labgrid yaml file that describes your lab.
+
+In order for a given platform to be tested, it must be acquired before starting
+tests and then released once complete. See the bin/konsulko-labgrid directory
+for example boards using this method.
 
 ## Dependencies
 
