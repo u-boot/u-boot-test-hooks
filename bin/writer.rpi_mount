@@ -25,29 +25,16 @@ build=${U_BOOT_BUILD_DIR}
 
 echo "Writing to ${mount_dir} from build at ${build}"
 
-case "${board_type}" in
-rpi)
-    kernel_dst=kernel.img
-    ;;
-rpi_2)
-    kernel_dst=kernel7.img
-    ;;
-rpi_3|rpi_3b|rpi_3_b_plus|rpi_4|rpi_arm64)
-    kernel_dst=kernel8.img
-    ;;
-rpi_3_32b|rpi_4_32b)
-    kernel_dst=kernel8-32.img
-    ;;
-*)
-    echo Unknown Pi \""${board_type}"\"
-    exit 1
-    ;;
-esac
-
-sudo rm -f ${mount_dir}/kernel*img
-sudo cp -v ${build}/u-boot.bin ${mount_dir}/${kernel_dst}
+sudo cp -v ${build}/u-boot.bin ${mount_dir}/u-boot.bin
 
 echo "enable_uart=1" | sudo tee ${mount_dir}/config.txt
+echo "kernel=u-boot.bin" | sudo tee -a ${mount_dir}/config.txt
+
+case "${board_type}" in
+rpi_3|rpi_3b|rpi_3_b_plus|rpi_4|rpi_arm64)
+    echo "arm_64bit=1" | sudo tee -a ${mount_dir}/config.txt
+    ;;
+esac
 
 case "${board_ident}" in
 3-32-pl011)
