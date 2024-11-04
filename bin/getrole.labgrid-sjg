@@ -1,6 +1,5 @@
-#!/bin/bash
-
-# Copyright (c) 2015-2016, NVIDIA CORPORATION. All rights reserved.
+# Copyright 2024 Google LLC
+# Written by Simon Glass
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -20,6 +19,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-. "$(dirname $0)/u-boot-test-common"
+[ -n "${do_configure}" ] && config_arg=",config_file"
 
-. "${bin_dir}/poweron.${power_impl}"
+exec labgrid-client -r "${target}" -a query -n \
+	UBootProviderDriver:board,board_extra,source_dir,build_dir,build_dir_extra${config_arg}

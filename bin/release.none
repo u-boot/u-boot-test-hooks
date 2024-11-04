@@ -1,6 +1,5 @@
-#!/bin/bash
-
-# Copyright (c) 2015-2016, NVIDIA CORPORATION. All rights reserved.
+# Copyright 2024 Google LLC
+# Written by Simon Glass <sjg@chromium.org>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -20,6 +19,4 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-. "$(dirname $0)/u-boot-test-common"
-
-. "${bin_dir}/poweron.${power_impl}"
+# No releasing needed

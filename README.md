@@ -199,6 +199,57 @@ scripts must be replicated once per board instance, or their actions somehow
 serialized, since they copy files into their own directories when executing, and
 hence parallel execution would cause incorrect operation.
 
+## Labgrid Integration
+
+Labgrid is a python library for embedded-board-control. It includes a client
+program which is used to integrate with the U-Boot pytests.
+
+Since Labgrid has all the information necessary to build and boot on a lab,
+there is no per-board configuration required. The various flash.xxx and
+recovery.xxx scripts are not used. To set it up:
+
+- In your bin/$hostname directory, create an executable file
+  `common-labgrid-sjg` and set your crossbar and environment information, for
+  example:
+
+      # Hostname and port for the gRPC coordinator
+      export LG_COORDINATOR=kea:20408
+
+      # Environment file for the lab
+      export LG_ENV="/path/to/kea_env.cfg"
+
+      # Location of the U-Boot test hooks
+      export UB_TEST_HOOKS=/path/to/u-boot-test-hooks
+
+      # Make sure only one buildman can run at a time, since it uses all CPUs
+      export BUILDMAN_PROCESS_LIMIT=1
+
+      # Use the internal console since microcom can miss serial input at boot
+      export LG_CONSOLE="internal"
+
+      # Tell u-boot-test-hooks to use the Labgrid-sjg integration
+      export USE_LABGRID_SJG=1
+
+      flash_impl=none
+      reset_impl=none
+      console_impl=labgrid-sjg
+      release_impl=labgrid-sjg
+      getrole_impl=labgrid-sjg
+      power_impl=none
+
+The last 6 lines tell the hooks to use Labgrid for console and board release
+as well as a new 'getrole' hook which is only used by Labgrid. The flash, reset
+and power features of boards are all handled by entirely by Labgrid.
+
+Then create another executable file (in the same directory) called 'conf.all',
+containing::
+
+    .. code-block:: bash
+
+    . "${bin_dir}/${hostname}/common-labgrid-sjg"
+
+That should be all that is needed.
+
 ## Dependencies
 
 The example scripts depend on various external tools, the installation location
