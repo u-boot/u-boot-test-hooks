@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# Copyright (c) 2015-2016, NVIDIA CORPORATION. All rights reserved.
+# Copyright 2024 Google LLC
+# Written by Simon Glass <sjg@chromium.org>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -20,6 +21,16 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-. "$(dirname $0)/u-boot-test-common"
+set -e
 
-. "${bin_dir}/poweron.${power_impl}"
+bin_dir="`dirname $0`"
+board_type="$1"
+board_ident="$2"
+hostname="`hostname`"
+
+# Use either the Labgrid integration or the traditional hooks
+if [ -n "${USE_LABGRID_SJG}" ]; then
+	. "${bin_dir}/${hostname}/conf.all"
+else
+	. "${bin_dir}/${hostname}/conf.${board_type}_${board_ident}"
+fi
