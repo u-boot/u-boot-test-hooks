@@ -21,5 +21,14 @@
 
 [ -n "${do_configure}" ] && config_arg=",config_file"
 
+# The following spurious output is present with Python 3.12 on Ubuntu 24.04 so
+# use a redirection to drop it:
+
+# Error in sys.excepthook:
+#
+# Original exception was:
+#
+
 exec labgrid-client -r "${target}" -a query -n \
-	UBootProviderDriver:board,board_extra,source_dir,build_dir,build_dir_extra${config_arg}
+	UBootProviderDriver:board,board_extra,source_dir,build_dir,build_dir_extra${config_arg} \
+	2>/dev/null
