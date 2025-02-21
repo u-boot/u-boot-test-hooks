@@ -1,0 +1,14 @@
+[Unit]
+Description=Labgrid Coordinator
+After=network.target
+
+[Service]
+Environment="PYTHONUNBUFFERED=1"
+ExecStart=/home/labgrid/.local/bin/labgrid-coordinator
+Restart=on-failure
+User=labgrid
+StateDirectory=labgrid-coordinator
+WorkingDirectory=/home/labgrid/labgrid-coordinator
+
+[Install]
+WantedBy=multi-user.target

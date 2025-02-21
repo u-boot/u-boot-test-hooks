@@ -1,0 +1,22 @@
+[Unit]
+Description=Labgrid Exporter
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Environment="PYTHONUNBUFFERED=1"
+Environment=HDCTOOLS=/vid/software/devel/ubtest/standalone-hdctools LG_COORDINATOR=kea:20408 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/vid/software/devel/ubtest/standalone-hdctools
+PassEnvironment=HDCTOOLS LG_COORDINATOR PATH
+ExecStart=/home/labgrid/.local/bin/labgrid-exporter /vid/software/devel/ubtest/lab/cfg/kea_export.yaml
+
+Restart=on-failure
+RestartForceExitStatus=100
+RestartSec=30
+User=labgrid
+WorkingDirectory=/home/labgrid/labgrid-exporter
+
+# Adjust to your distribution (most often "dialout" or "tty")
+SupplementaryGroups=dialout plugdev
+
+[Install]
+WantedBy=multi-user.target
