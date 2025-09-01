@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: MIT
+#
+# Copyright (c) 2025 Heinrich Schuchardt
+
+console_impl=qemu
+qemu_machine="virt,acpi=on"
+qemu_binary="qemu-system-riscv64"
+qemu_extra_args="-cpu rva23s64 -m 1G -nographic -netdev user,id=net0,tftp=${UBOOT_TRAVIS_BUILD_DIR} -device virtio-net-device,netdev=net0 -netdev user,id=net1,tftp=${UBOOT_TRAVIS_BUILD_DIR} -device virtio-net-device,netdev=net1 -device virtio-rng-device"
+qemu_kernel_args="-kernel ${U_BOOT_BUILD_DIR}/u-boot"
+reset_impl=none
+flash_impl=none
