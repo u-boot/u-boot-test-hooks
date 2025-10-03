@@ -20,3 +20,7 @@
 
 # Call fiptool to update an existing fip.bin file
 fiptool update --nt-fw="${U_BOOT_BUILD_DIR}/u-boot.bin" ${fip}
+
+# Create a flash image
+dd if=${bl1} of=${U_BOOT_BUILD_DIR}/flash.bin bs=4096 conv=notrunc
+dd if=${fip} of=${U_BOOT_BUILD_DIR}/flash.bin seek=64 bs=4096 conv=notrunc

@@ -18,6 +18,13 @@
 #
 # U-Boot must be built with CONFIG_TPM2_MMIO=y.
 
+set -e
+
+rm -rf /tmp/tpm
 mkdir -p /tmp/tpm
+
+if [ -n "${helper_setup}" ]; then
+    eval "${helper_setup}"
+fi
 swtpm socket -d -t --tpmstate dir=/tmp/tpm --tpm2 \
 --ctrl type=unixio,path=/tmp/tpm/swtpm-sock
