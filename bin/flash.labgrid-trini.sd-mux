@@ -25,7 +25,7 @@ echo "switching sd-mux to host"
 labgrid-client sd-mux host
 #let mmc have some time to initialize to be available for udisks
 sleep 1
-. writer.${flash_writer}
+. writer.${flash_writer} ${raw_device} ${U_BOOT_BUILD_DIR}
 
 echo "switching sd-mux to dut"
 labgrid-client sd-mux dut
