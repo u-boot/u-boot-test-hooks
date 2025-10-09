@@ -19,8 +19,8 @@
 # DEALINGS IN THE SOFTWARE.
 
 # Ensure we have all environment variables set
-if [ -z "${LG_CROSSBAR}" ]; then
-	echo "LG_CROSSBAR is unset";
+if [ -z "${LG_COORDINATOR}" ]; then
+	echo "LG_COORDINATOR is unset";
 	exit 1;
 fi
 
