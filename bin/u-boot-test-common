@@ -32,5 +32,9 @@ hostname="`hostname`"
 if [ -n "${USE_LABGRID_SJG}" ]; then
 	. "${bin_dir}/${hostname}/conf.all"
 else
-	. "${bin_dir}/${hostname}/conf.${board_type}_${board_ident}"
+	if [ -f "${bin_dir}/${hostname}/conf.${board_type}_${board_ident}" ]; then
+		. "${bin_dir}/${hostname}/conf.${board_type}_${board_ident}"
+	else
+		. "${bin_dir}/${hostname}/conf.${board_type}"
+	fi
 fi

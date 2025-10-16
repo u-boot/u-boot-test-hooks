@@ -20,11 +20,25 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+set -e
+
+if [ -n "${fip}" ] && [ -n "${bl1}" ]; then
+	echo "Both fip and bl1 exist - TF-A mode"
+	helper_setup="swtpm_setup --tpmstate /tmp/tpm --tpm2 --pcr-banks sha256"
+	qemu_machine="virt,secure=on"
+	qemu_kernel_args="-bios ${U_BOOT_BUILD_DIR}/flash.bin"
+	flash_impl=fiptool
+else
+	qemu_machine="virt"
+	qemu_kernel_args="-bios ${U_BOOT_BUILD_DIR}/u-boot.bin"
+	flash_impl=none
+fi
+
 console_impl=qemu
-qemu_machine="virt"
 qemu_helper_script="swtpm"
 qemu_binary="qemu-system-aarch64"
-qemu_extra_args="-cpu cortex-a57 -nographic -netdev user,id=net0,tftp=${UBOOT_TRAVIS_BUILD_DIR} -device e1000,netdev=net0 -device virtio-rng-pci -semihosting -chardev socket,id=chrtpm,path=/tmp/tpm/swtpm-sock -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis-device,tpmdev=tpm0"
-qemu_kernel_args="-bios ${U_BOOT_BUILD_DIR}/u-boot.bin"
+qemu_net_args="-netdev user,id=net0,tftp=${UBOOT_TRAVIS_BUILD_DIR} -device e1000,netdev=net0"
+qemu_host_args="-semihosting-config enable=on,target=native"
+qemu_tpm_args="-chardev socket,id=chrtpm,path=/tmp/tpm/swtpm-sock -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis-device,tpmdev=tpm0"
+qemu_extra_args="-m 4G -cpu cortex-a57 -nographic -device virtio-rng-pci -d unimp ${qemu_host_args} ${qemu_net_args} ${qemu_tpm_args}"
 reset_impl=none
-flash_impl=none
