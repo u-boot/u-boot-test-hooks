@@ -100,6 +100,32 @@ targets:
         autoboot: 'Hit any key to stop autoboot'
       strategy:
         cls: UBootStrategy
+  bbb-1:
+    resources:
+      RemotePlace:
+        name: bbb-1
+    drivers:
+      power:
+        cls: ExternalPowerDriver
+        cmd_on: 'snmpset -v 2c -c private 192.168.1.254 .1.3.6.1.4.1.1718.3.2.3.1.11.1.1.9 i 1'
+        cmd_off: 'snmpset -v 2c -c private 192.168.1.254 .1.3.6.1.4.1.1718.3.2.3.1.11.1.1.9 i 2'
+      mux:
+        cls: USBSDWireDriver
+      storage:
+        cls: USBStorageDriver
+      serial:
+        cls: SerialDriver
+      shell:
+        cls: ShellDriver
+        prompt: 'root@.*:~# '
+        login_prompt: 'login: '
+        username: 'root'
+      uboot:
+        cls: UBootDriver
+        prompt: 'U-Boot> '
+        autoboot: 'Hit any key to stop autoboot'
+      strategy:
+        cls: UBootStrategy
   sage-exporter-rpi3-1:
     resources:
       RemotePlace:
@@ -134,5 +160,16 @@ targets:
     drivers:
       power:
         cls: NetworkPowerDriver
+      ssh:
+        cls: SSHDriver
+  sage-exporter-bbb-1:
+    resources:
+      RemotePlace:
+        name: sage-exporter-bbb-1
+    drivers:
+      power:
+        cls: ExternalPowerDriver
+        cmd_on: 'snmpset -v 2c -c private 192.168.1.254 .1.3.6.1.4.1.1718.3.2.3.1.11.1.1.13 i 1'
+        cmd_off: 'snmpset -v 2c -c private 192.168.1.254 .1.3.6.1.4.1.1718.3.2.3.1.11.1.1.13 i 2'
       ssh:
         cls: SSHDriver
